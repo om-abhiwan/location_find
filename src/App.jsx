@@ -6,7 +6,9 @@ function App() {
 
   const [lat, setLat] = useState(0)
   const [lon, setLon] = useState(0)
-  const [data,setData] = useState([])
+  const [data, setData] = useState([])
+
+
   const getLocation = async () => {
     navigator.geolocation.getCurrentPosition((position) => {
       const { latitude, longitude } = position.coords;
@@ -75,9 +77,25 @@ function App() {
 
 
 
+  const [updateLat,setUpdateLat] = useState(0)
+  const [updateLon,setUpdateLon] = useState(0)
 
 
 
+  const handleLocationUpdate = (position) => {
+    const { latitude, longitude } = position.coords;
+    setUpdateLat(latitude)
+    setUpdateLon(longitude)
+  };
+
+  // Request continuous location updates
+  const watchId = navigator.geolocation.watchPosition(
+    handleLocationUpdate,
+    (error) => {
+      // Handle error
+      console.error('Error getting location:', error);
+    }
+  );
 
 
 
@@ -98,6 +116,12 @@ function App() {
       <button onClick={() => { getLocation() }} >Get Location</button>
 
       <p>Person is at our home or not? <span id="atHome">{data ? data : ""}</span> </p>
+
+
+
+
+      {updateLat} , {updateLon}
+
 
 
     </>
